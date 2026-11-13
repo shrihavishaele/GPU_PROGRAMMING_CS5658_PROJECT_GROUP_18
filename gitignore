@@ -1,0 +1,69 @@
+# ==========================================
+# macOS System & Finder Waste
+# ==========================================
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails and Spotlight
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Network share trash & temporary files
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+
+# ==========================================
+# VS Code & Extension Waste
+# ==========================================
+# Ignore the entire .vscode folder
+.vscode/
+
+# OR, if you want to share project settings/extensions with your team,
+# comment out ".vscode/" above and uncomment the 4 lines below instead:
+# .vscode/*
+# !.vscode/settings.json
+# !.vscode/tasks.json
+# !.vscode/launch.json
+# !.vscode/extensions.json
+
+# VS Code local file history and workspaces
+.history/
+*.code-workspace
+
+# Packaged VS Code extensions
+*.vsix
+
+
+# ==========================================
+# C / C++ / CUDA Build Artifacts (Bonus)
+# ==========================================
+# Compiled binaries and object files
+*.o
+*.obj
+*.out
+*.exe
+*.app
+a.out
+
+# CUDA / compiler generated files
+*.cudafe1.*
+*.cudafe2.*
+*.fatbin*
+*.ptx
+*.cubin
+*.module_id
+*.reg.c
