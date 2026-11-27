@@ -1,0 +1,345 @@
+============================================================
+GPU Device        : NVIDIA A30
+Compute Capability: 8.0
+SM Count          : 56
+Global Memory     : 23.53 GB
+============================================================
+
+===== CORRECTNESS TESTS =====
+
+====================================
+Test case: Unsorted array
+Array size: 8
+====================================
+Original array: 8 3 7 1 9 2 6 4 
+CPU sorted array: 1 2 3 4 6 7 8 9 
+GPU sorted array: 1 2 3 4 6 7 8 9 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0005 ms
+GPU kernel time: 0.1539 ms
+Total GPU time: 0.1989 ms
+Kernel speedup: 0.0030x
+Total speedup: 0.0023x
+
+====================================
+Test case: Already sorted
+Array size: 8
+====================================
+Original array: 1 2 3 4 5 6 7 8 
+CPU sorted array: 1 2 3 4 5 6 7 8 
+GPU sorted array: 1 2 3 4 5 6 7 8 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0001 ms
+GPU kernel time: 0.1522 ms
+Total GPU time: 0.1870 ms
+Kernel speedup: 0.0008x
+Total speedup: 0.0007x
+
+====================================
+Test case: Reverse sorted
+Array size: 8
+====================================
+Original array: 8 7 6 5 4 3 2 1 
+CPU sorted array: 1 2 3 4 5 6 7 8 
+GPU sorted array: 1 2 3 4 5 6 7 8 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0001 ms
+GPU kernel time: 0.1531 ms
+Total GPU time: 0.1863 ms
+Kernel speedup: 0.0009x
+Total speedup: 0.0008x
+
+====================================
+Test case: All equal
+Array size: 8
+====================================
+Original array: 5 5 5 5 5 5 5 5 
+CPU sorted array: 5 5 5 5 5 5 5 5 
+GPU sorted array: 5 5 5 5 5 5 5 5 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0001 ms
+GPU kernel time: 0.1527 ms
+Total GPU time: 0.1893 ms
+Kernel speedup: 0.0005x
+Total speedup: 0.0004x
+
+====================================
+Test case: Duplicates
+Array size: 8
+====================================
+Original array: 4 2 4 1 2 1 4 2 
+CPU sorted array: 1 1 2 2 2 4 4 4 
+GPU sorted array: 1 1 2 2 2 4 4 4 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0001 ms
+GPU kernel time: 0.1518 ms
+Total GPU time: 0.1868 ms
+Kernel speedup: 0.0009x
+Total speedup: 0.0007x
+
+====================================
+Test case: Negative numbers
+Array size: 8
+====================================
+Original array: -5 -8 -2 -1 -7 -3 -4 -6 
+CPU sorted array: -8 -7 -6 -5 -4 -3 -2 -1 
+GPU sorted array: -8 -7 -6 -5 -4 -3 -2 -1 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0001 ms
+GPU kernel time: 0.1525 ms
+Total GPU time: 0.1854 ms
+Kernel speedup: 0.0008x
+Total speedup: 0.0006x
+
+====================================
+Test case: Mixed numbers
+Array size: 8
+====================================
+Original array: -5 8 0 -2 6 -1 4 3 
+CPU sorted array: -5 -2 -1 0 3 4 6 8 
+GPU sorted array: -5 -2 -1 0 3 4 6 8 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0001 ms
+GPU kernel time: 0.1524 ms
+Total GPU time: 0.1895 ms
+Kernel speedup: 0.0007x
+Total speedup: 0.0006x
+
+====================================
+Test case: Nearly sorted
+Array size: 8
+====================================
+Original array: 1 2 3 5 4 6 7 8 
+CPU sorted array: 1 2 3 4 5 6 7 8 
+GPU sorted array: 1 2 3 4 5 6 7 8 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0001 ms
+GPU kernel time: 0.1524 ms
+Total GPU time: 0.1852 ms
+Kernel speedup: 0.0005x
+Total speedup: 0.0004x
+
+====================================
+Test case: Alternating values
+Array size: 8
+====================================
+Original array: 1 9 1 9 1 9 1 9 
+CPU sorted array: 1 1 1 1 9 9 9 9 
+GPU sorted array: 1 1 1 1 9 9 9 9 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0001 ms
+GPU kernel time: 0.1524 ms
+Total GPU time: 0.1852 ms
+Kernel speedup: 0.0007x
+Total speedup: 0.0006x
+
+====================================
+Test case: Extreme values
+Array size: 8
+====================================
+Original array: 2147483647 -2147483648 0 -1 2147483647 -2147483648 1 5 
+CPU sorted array: -2147483648 -2147483648 -1 0 1 5 2147483647 2147483647 
+GPU sorted array: -2147483648 -2147483648 -1 0 1 5 2147483647 2147483647 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0001 ms
+GPU kernel time: 0.1539 ms
+Total GPU time: 0.1888 ms
+Kernel speedup: 0.0009x
+Total speedup: 0.0007x
+
+===== PERFORMANCE TESTS =====
+
+====================================
+Test case: Random array
+Array size: 16
+====================================
+Original array: -538846106 1273642419 1935803228 -1359637234 996406378 1201263687 423734972 415968276 -1477388698 -232646535 -1477492270 -1718094634 -1898016438 -175024694 1572714583 -714216076 
+CPU sorted array: -1898016438 -1718094634 -1477492270 -1477388698 -1359637234 -714216076 -538846106 -232646535 -175024694 415968276 423734972 996406378 1201263687 1273642419 1572714583 1935803228 
+GPU sorted array: -1898016438 -1718094634 -1477492270 -1477388698 -1359637234 -714216076 -538846106 -232646535 -175024694 415968276 423734972 996406378 1201263687 1273642419 1572714583 1935803228 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0002 ms
+GPU kernel time: 0.1536 ms
+Total GPU time: 0.1872 ms
+Kernel speedup: 0.0016x
+Total speedup: 0.0013x
+
+====================================
+Test case: Random array
+Array size: 32
+====================================
+Original array: -538846106 1273642419 1935803228 -1359637234 996406378 1201263687 423734972 415968276 -1477388698 -232646535 -1477492270 -1718094634 -1898016438 -175024694 1572714583 -714216076 434285667 -1533875353 893664919 648061058 -2059073899 -1905197772 2018247425 953477463 1427830251 1883569565 -1235494107 -2144138879 -1366551361 2114032571 -1359767276 504579232 
+CPU sorted array: -2144138879 -2059073899 -1905197772 -1898016438 -1718094634 -1533875353 -1477492270 -1477388698 -1366551361 -1359767276 -1359637234 -1235494107 -714216076 -538846106 -232646535 -175024694 415968276 423734972 434285667 504579232 648061058 893664919 953477463 996406378 1201263687 1273642419 1427830251 1572714583 1883569565 1935803228 2018247425 2114032571 
+GPU sorted array: -2144138879 -2059073899 -1905197772 -1898016438 -1718094634 -1533875353 -1477492270 -1477388698 -1366551361 -1359767276 -1359637234 -1235494107 -714216076 -538846106 -232646535 -175024694 415968276 423734972 434285667 504579232 648061058 893664919 953477463 996406378 1201263687 1273642419 1427830251 1572714583 1883569565 1935803228 2018247425 2114032571 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0008 ms
+GPU kernel time: 0.1527 ms
+Total GPU time: 0.1859 ms
+Kernel speedup: 0.0051x
+Total speedup: 0.0042x
+
+====================================
+Test case: Random array
+Array size: 128
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0036 ms
+GPU kernel time: 0.1549 ms
+Total GPU time: 0.1883 ms
+Kernel speedup: 0.0231x
+Total speedup: 0.0190x
+
+====================================
+Test case: Random array
+Array size: 256
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0075 ms
+GPU kernel time: 0.1516 ms
+Total GPU time: 0.1849 ms
+Kernel speedup: 0.0493x
+Total speedup: 0.0404x
+
+====================================
+Test case: Random array
+Array size: 512
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0170 ms
+GPU kernel time: 0.1540 ms
+Total GPU time: 0.1884 ms
+Kernel speedup: 0.1104x
+Total speedup: 0.0902x
+
+====================================
+Test case: Random array
+Array size: 1024
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.0365 ms
+GPU kernel time: 0.1598 ms
+Total GPU time: 0.1954 ms
+Kernel speedup: 0.2286x
+Total speedup: 0.1870x
+
+====================================
+Test case: Random array
+Array size: 4096
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.1735 ms
+GPU kernel time: 0.1612 ms
+Total GPU time: 0.2039 ms
+Kernel speedup: 1.0761x
+Total speedup: 0.8507x
+
+====================================
+Test case: Random array
+Array size: 16384
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 0.8107 ms
+GPU kernel time: 0.2576 ms
+Total GPU time: 0.3332 ms
+Kernel speedup: 3.1466x
+Total speedup: 2.4328x
+
+====================================
+Test case: Random array
+Array size: 65536
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 3.5770 ms
+GPU kernel time: 0.2809 ms
+Total GPU time: 0.4298 ms
+Kernel speedup: 12.7358x
+Total speedup: 8.3220x
+
+====================================
+Test case: Random array
+Array size: 262144
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 16.2373 ms
+GPU kernel time: 0.3828 ms
+Total GPU time: 0.9645 ms
+Kernel speedup: 42.4153x
+Total speedup: 16.8341x
+
+====================================
+Test case: Random array
+Array size: 1048576
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 72.1952 ms
+GPU kernel time: 0.7800 ms
+Total GPU time: 2.4858 ms
+Kernel speedup: 92.5617x
+Total speedup: 29.0435x
+
+====================================
+Test case: Random array
+Array size: 4194304
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU std::sort time: 314.3893 ms
+GPU kernel time: 2.5730 ms
+Total GPU time: 9.4240 ms
+Kernel speedup: 122.1882x
+Total speedup: 33.3606x
+
+====================================
+          TEST SUMMARY
+====================================
+Total test cases: 22
+Passed: 22
+Failed: 0
+ALL TEST CASES PASSED
+Generating '/tmp/nsys-report-aabf.qdstrm'
+[1/1] [0%                          ] radix_sort_report_16954.nsys-rep[1/1] [0%                          ] radix_sort_report_16954.nsys-rep[1/1] [7%                          ] radix_sort_report_16954.nsys-rep[1/1] [=15%                        ] radix_sort_report_16954.nsys-rep[1/1] [======34%                   ] radix_sort_report_16954.nsys-rep[1/1] [================71%         ] radix_sort_report_16954.nsys-rep[1/1] [=================72%        ] radix_sort_report_16954.nsys-rep[1/1] [===================79%      ] radix_sort_report_16954.nsys-rep[1/1] [======================90%   ] radix_sort_report_16954.nsys-rep[1/1] [========================100%] radix_sort_report_16954.nsys-rep[1/1] [========================100%] radix_sort_report_16954.nsys-rep
+Generated:
+    /home/s112301018-unnikrishnan/GPU_PROJECT/output/radix_sort_report_16954.nsys-rep
+Job completed
