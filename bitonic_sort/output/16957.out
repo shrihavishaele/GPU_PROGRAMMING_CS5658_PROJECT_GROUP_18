@@ -1,0 +1,352 @@
+
+CORRECTNESS TESTS
+
+====================================
+Test case: Unsorted array
+Array size: 8
+====================================
+Original array: 8 3 7 1 9 2 6 4 
+CPU sorted array: 1 2 3 4 6 7 8 9 
+GPU sorted array: 1 2 3 4 6 7 8 9 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0007 ms
+GPU kernel time: 0.0702 ms
+Total GPU time: 0.2781 ms
+Kernel speedup: 0.0094x
+Total speedup: 0.0024x
+
+====================================
+Test case: Already sorted
+Array size: 8
+====================================
+Original array: 1 2 3 4 5 6 7 8 
+CPU sorted array: 1 2 3 4 5 6 7 8 
+GPU sorted array: 1 2 3 4 5 6 7 8 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0006 ms
+GPU kernel time: 0.0319 ms
+Total GPU time: 0.1236 ms
+Kernel speedup: 0.0180x
+Total speedup: 0.0046x
+
+====================================
+Test case: Reverse sorted
+Array size: 8
+====================================
+Original array: 8 7 6 5 4 3 2 1 
+CPU sorted array: 1 2 3 4 5 6 7 8 
+GPU sorted array: 1 2 3 4 5 6 7 8 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0005 ms
+GPU kernel time: 0.0311 ms
+Total GPU time: 0.1384 ms
+Kernel speedup: 0.0174x
+Total speedup: 0.0039x
+
+====================================
+Test case: All equal
+Array size: 8
+====================================
+Original array: 5 5 5 5 5 5 5 5 
+CPU sorted array: 5 5 5 5 5 5 5 5 
+GPU sorted array: 5 5 5 5 5 5 5 5 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0004 ms
+GPU kernel time: 0.0332 ms
+Total GPU time: 0.1422 ms
+Kernel speedup: 0.0126x
+Total speedup: 0.0029x
+
+====================================
+Test case: Duplicates
+Array size: 8
+====================================
+Original array: 4 2 4 1 2 1 4 2 
+CPU sorted array: 1 1 2 2 2 4 4 4 
+GPU sorted array: 1 1 2 2 2 4 4 4 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0004 ms
+GPU kernel time: 0.0300 ms
+Total GPU time: 0.1394 ms
+Kernel speedup: 0.0138x
+Total speedup: 0.0030x
+
+====================================
+Test case: Negative numbers
+Array size: 8
+====================================
+Original array: -5 -8 -2 -1 -7 -3 -4 -6 
+CPU sorted array: -8 -7 -6 -5 -4 -3 -2 -1 
+GPU sorted array: -8 -7 -6 -5 -4 -3 -2 -1 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0004 ms
+GPU kernel time: 0.0304 ms
+Total GPU time: 0.1331 ms
+Kernel speedup: 0.0120x
+Total speedup: 0.0027x
+
+====================================
+Test case: Mixed numbers
+Array size: 8
+====================================
+Original array: -5 8 0 -2 6 -1 4 3 
+CPU sorted array: -5 -2 -1 0 3 4 6 8 
+GPU sorted array: -5 -2 -1 0 3 4 6 8 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0003 ms
+GPU kernel time: 0.0310 ms
+Total GPU time: 0.1390 ms
+Kernel speedup: 0.0112x
+Total speedup: 0.0025x
+
+====================================
+Test case: Nearly sorted
+Array size: 8
+====================================
+Original array: 1 2 3 5 4 6 7 8 
+CPU sorted array: 1 2 3 4 5 6 7 8 
+GPU sorted array: 1 2 3 4 5 6 7 8 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0003 ms
+GPU kernel time: 0.0300 ms
+Total GPU time: 0.1397 ms
+Kernel speedup: 0.0114x
+Total speedup: 0.0025x
+
+====================================
+Test case: Alternating values
+Array size: 8
+====================================
+Original array: 1 9 1 9 1 9 1 9 
+CPU sorted array: 1 1 1 1 9 9 9 9 
+GPU sorted array: 1 1 1 1 9 9 9 9 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0003 ms
+GPU kernel time: 0.0317 ms
+Total GPU time: 0.1446 ms
+Kernel speedup: 0.0102x
+Total speedup: 0.0022x
+
+====================================
+Test case: Extreme values
+Array size: 8
+====================================
+Original array: 2147483647 -2147483648 0 -1 2147483647 -2147483648 1 5 
+CPU sorted array: -2147483648 -2147483648 -1 0 1 5 2147483647 2147483647 
+GPU sorted array: -2147483648 -2147483648 -1 0 1 5 2147483647 2147483647 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0003 ms
+GPU kernel time: 0.0302 ms
+Total GPU time: 0.1374 ms
+Kernel speedup: 0.0094x
+Total speedup: 0.0021x
+
+===== PERFORMANCE TESTS =====
+
+====================================
+Test case: Random array
+Array size: 16
+====================================
+Original array: 3745 7966 9508 1834 7320 7797 5987 5969 1560 4458 1560 999 580 4592 8662 3337 
+CPU sorted array: 580 999 1560 1560 1834 3337 3745 4458 4592 5969 5987 7320 7797 7966 8662 9508 
+GPU sorted array: 580 999 1560 1560 1834 3337 3745 4458 4592 5969 5987 7320 7797 7966 8662 9508 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0012 ms
+GPU kernel time: 0.0492 ms
+Total GPU time: 0.1514 ms
+Kernel speedup: 0.0248x
+Total speedup: 0.0080x
+
+====================================
+Test case: Random array
+Array size: 32
+====================================
+Original array: 3745 7966 9508 1834 7320 7797 5987 5969 1560 4458 1560 999 580 4592 8662 3337 6011 1428 7081 6509 205 564 9700 7220 8325 9386 2123 7 1818 9923 1834 6175 
+CPU sorted array: 7 205 564 580 999 1428 1560 1560 1818 1834 1834 2123 3337 3745 4458 4592 5969 5987 6011 6175 6509 7081 7220 7320 7797 7966 8325 8662 9386 9508 9700 9923 
+GPU sorted array: 7 205 564 580 999 1428 1560 1560 1818 1834 1834 2123 3337 3745 4458 4592 5969 5987 6011 6175 6509 7081 7220 7320 7797 7966 8325 8662 9386 9508 9700 9923 
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0034 ms
+GPU kernel time: 0.0703 ms
+Total GPU time: 0.1684 ms
+Kernel speedup: 0.0479x
+Total speedup: 0.0200x
+
+====================================
+Test case: Random array
+Array size: 128
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0167 ms
+GPU kernel time: 0.1293 ms
+Total GPU time: 0.2148 ms
+Kernel speedup: 0.1293x
+Total speedup: 0.0778x
+
+====================================
+Test case: Random array
+Array size: 256
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0325 ms
+GPU kernel time: 0.1651 ms
+Total GPU time: 0.2469 ms
+Kernel speedup: 0.1967x
+Total speedup: 0.1315x
+
+====================================
+Test case: Random array
+Array size: 512
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.0782 ms
+GPU kernel time: 0.2246 ms
+Total GPU time: 0.3078 ms
+Kernel speedup: 0.3483x
+Total speedup: 0.2542x
+
+====================================
+Test case: Random array
+Array size: 1024
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.1748 ms
+GPU kernel time: 0.2723 ms
+Total GPU time: 0.3572 ms
+Kernel speedup: 0.6419x
+Total speedup: 0.4892x
+
+====================================
+Test case: Random array
+Array size: 4096
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 0.9394 ms
+GPU kernel time: 0.3914 ms
+Total GPU time: 0.4939 ms
+Kernel speedup: 2.4002x
+Total speedup: 1.9020x
+
+====================================
+Test case: Random array
+Array size: 16384
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 4.8390 ms
+GPU kernel time: 0.5392 ms
+Total GPU time: 0.6749 ms
+Kernel speedup: 8.9749x
+Total speedup: 7.1699x
+
+====================================
+Test case: Random array
+Array size: 65536
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 24.2794 ms
+GPU kernel time: 0.8069 ms
+Total GPU time: 1.0435 ms
+Kernel speedup: 30.0905x
+Total speedup: 23.2674x
+
+====================================
+Test case: Random array
+Array size: 262144
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 120.5978 ms
+GPU kernel time: 1.4383 ms
+Total GPU time: 1.9918 ms
+Kernel speedup: 83.8491x
+Total speedup: 60.5476x
+
+====================================
+Test case: Random array
+Array size: 1048576
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 588.2415 ms
+GPU kernel time: 3.9956 ms
+Total GPU time: 5.0970 ms
+Kernel speedup: 147.2217x
+Total speedup: 115.4093x
+
+====================================
+Test case: Random array
+Array size: 4194304
+====================================
+CPU verification: PASS
+GPU verification: PASS
+Sorting verification: PASS
+CPU Bitonic Sort time: 2819.6402 ms
+GPU kernel time: 16.1335 ms
+Total GPU time: 19.7684 ms
+Kernel speedup: 174.7689x
+Total speedup: 142.6338x
+
+
+TEST SUMMARY
+Total test cases: 22
+Passed: 22
+Failed: 0
+ALL TEST CASES PASSED
+
+
+
+Generating '/tmp/nsys-report-764c.qdstrm'
+
+[1/1] [0%                          ] bitonic_sort_report_16957.nsys-rep
+[1/1] [0%                          ] bitonic_sort_report_16957.nsys-rep
+[1/1] [6%                          ] bitonic_sort_report_16957.nsys-rep
+[1/1] [========40%                 ] bitonic_sort_report_16957.nsys-rep
+[1/1] [=============59%            ] bitonic_sort_report_16957.nsys-rep
+[1/1] [=============60%            ] bitonic_sort_report_16957.nsys-rep
+[1/1] [==============63%           ] bitonic_sort_report_16957.nsys-rep
+[1/1] [=====================86%    ] bitonic_sort_report_16957.nsys-rep
+[1/1] [=======================93%  ] bitonic_sort_report_16957.nsys-rep
+[1/1] [========================100%] bitonic_sort_report_16957.nsys-rep
+[1/1] [========================100%] bitonic_sort_report_16957.nsys-rep
+Generated:
+    /home/s112301033-unnikrishnan/bitonic_sort/output/bitonic_sort_report_16957.nsys-rep
+Job completed
