@@ -43,8 +43,9 @@ This project implements, optimizes, and benchmarks four distinct GPU sorting arc
 * **Approach:** A generalized multi-way quicksort that partitions the input into multiple buckets in a single global distribution pass using randomly oversampled pivot values (*splitters*).
 * **CUDA Optimizations:**
   * Splitters are cached in shared memory, where threads perform binary search to classify elements into buckets.
-  * Local bucket counts are aggregated via an exclusive prefix sum (scan) to compute global bucket offsets for coalesced writes, followed by local shared-memory sorting.
-  * **Skew & Duplicate Handling:** Uses element indices for tie-breaking on duplicate keys and automatically falls back to a global sort for oversized buckets to prevent shared-memory overflow.
+  * An exclusive scan over per-block bucket counts computes each block's bucket offsets; elements are then scattered into the bucket segments.
+  * Buckets within the shared-memory limit are sorted with parallel odd-even transposition sort; oversized buckets use Thrust's device sort.
+  * **Skew & Duplicate Handling:** Uses element indices for tie-breaking when classifying duplicate keys and falls back to device sorting for oversized buckets.
 
 ### 4. Bitonic Sort
 * **Approach:** Maps a deterministic $O(N \log^2 N)$ sorting network of compare-and-swap operations directly onto CUDA threads.
