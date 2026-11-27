@@ -54,7 +54,7 @@ Temporary Items
 # Compiled binaries and object files
 *.o
 *.obj
-*.out
+
 *.exe
 *.app
 a.out
