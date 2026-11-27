@@ -8,10 +8,8 @@
 #include <climits>
 #include <string>
 #include <cuda_runtime.h>
-
 using namespace std;
 
-// Simple CUDA error checking
 void checkCuda(cudaError_t err){
     if (err != cudaSuccess){
         cerr << "CUDA error: " << cudaGetErrorString(err) << endl;
@@ -19,7 +17,6 @@ void checkCuda(cudaError_t err){
     }
 }
 
-// Bitonic Sort kernel
 __global__ void bitonicSortKernel(int *data, int j, int k, int n){
     int i = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -63,7 +60,7 @@ __global__ void bitonicSortKernel(int *data, int j, int k, int n){
     }
 }
 
-// Launch kernels for each comparison stage
+//launch kernels for each comparison stage
 void bitonicSortGPU(int *d_data, int n){
     int threads = 256;
     int blocks = (n + threads - 1) / threads;
@@ -77,7 +74,7 @@ void bitonicSortGPU(int *d_data, int n){
     }
 }
 
-// Allocate memory, sort on GPU and measure execution time
+//allocate memory, sort on GPU and measure execution time
 void gpuSort(vector<int>& data, float& kernelTime, double& totalTime){
     int n = data.size();
     if (n <= 0 || (n & (n - 1)) != 0){
@@ -89,11 +86,9 @@ void gpuSort(vector<int>& data, float& kernelTime, double& totalTime){
     size_t bytes = n * sizeof(int);
     auto totalStart = chrono::steady_clock::now();
 
-    // Allocate and copy input to GPU
     checkCuda(cudaMalloc((void**)&d_data, bytes));
     checkCuda(cudaMemcpy(d_data, data.data(), bytes, cudaMemcpyHostToDevice));
 
-    // Measure GPU sorting time
     cudaEvent_t start, stop;
     checkCuda(cudaEventCreate(&start));
     checkCuda(cudaEventCreate(&stop));
@@ -103,7 +98,6 @@ void gpuSort(vector<int>& data, float& kernelTime, double& totalTime){
     checkCuda(cudaEventSynchronize(stop));
     checkCuda(cudaEventElapsedTime(&kernelTime, start, stop));
 
-    // Copy sorted array back to CPU
     checkCuda(cudaMemcpy(data.data(), d_data, bytes, cudaMemcpyDeviceToHost));
     auto totalEnd = chrono::steady_clock::now();
     totalTime = chrono::duration<double, milli>(totalEnd - totalStart).count();
@@ -155,7 +149,6 @@ void bitonicSortCPU(vector<int>& data){
     }
 }
 
-// Print array
 void printArray(const vector<int>& arr){
     for (int x : arr){
         cout << x << " ";
@@ -163,7 +156,7 @@ void printArray(const vector<int>& arr){
     cout << endl;
 }
 
-// Generate random array with a fixed seed
+// Generate random array
 vector<int> randomArray(int n){
     vector<int> arr(n);
     mt19937 rng(42);
@@ -175,7 +168,6 @@ vector<int> randomArray(int n){
     return arr;
 }
 
-// Execute and verify one test case
 bool runTest(string name, vector<int> arr){
     int n = arr.size();
     cout << "\n====================================\n";
@@ -188,18 +180,15 @@ bool runTest(string name, vector<int> arr){
         printArray(arr);
     }
 
-    // Independent reference (not included in CPU timing)
     vector<int> reference = arr;
     sort(reference.begin(), reference.end());
 
-    // Sequential CPU Bitonic Sort and timing
     vector<int> cpuData = arr;
     auto cpuStart = chrono::steady_clock::now();
     bitonicSortCPU(cpuData);
     auto cpuEnd = chrono::steady_clock::now();
     double cpuTime = chrono::duration<double, milli>(cpuEnd - cpuStart).count();
 
-    // GPU sorting and timing
     float kernelTime = 0;
     double totalTime = 0;
     gpuSort(arr, kernelTime, totalTime);
@@ -211,7 +200,6 @@ bool runTest(string name, vector<int> arr){
         printArray(arr);
     }
 
-    // Verify both implementations against the independent reference
     bool cpuCorrect = (cpuData == reference);
     bool gpuCorrect = (arr == reference);
     bool correct = cpuCorrect && gpuCorrect;
@@ -227,7 +215,6 @@ bool runTest(string name, vector<int> arr){
         cout << "Sorting verification: FAIL" << endl;
     }
 
-    // Display execution times and speedup
     cout << fixed << setprecision(4);
     cout << "CPU Bitonic Sort time: " << cpuTime << " ms" << endl;
     cout << "GPU kernel time: " << kernelTime << " ms" << endl;
@@ -267,60 +254,57 @@ int main(int argc, char *argv[]){
 
     cout << "\nCORRECTNESS TESTS\n";
 
-    // Test 1: Unsorted array
+    //unsorted array
     passed += runTest("Unsorted array", {8, 3, 7, 1, 9, 2, 6, 4});
     total++;
 
-    // Test 2: Already sorted array
+    //already sorted array
     passed += runTest("Already sorted", {1, 2, 3, 4, 5, 6, 7, 8});
     total++;
 
-    // Test 3: Reverse sorted array
+    //reverse sorted array
     passed += runTest("Reverse sorted", {8, 7, 6, 5, 4, 3, 2, 1});
     total++;
 
-    // Test 4: All equal elements
+    //all equal elements
     passed += runTest("All equal", {5, 5, 5, 5, 5, 5, 5, 5});
     total++;
 
-    // Test 5: Duplicate elements
+    //duplicate elements
     passed += runTest("Duplicates", {4, 2, 4, 1, 2, 1, 4, 2});
     total++;
 
-    // Test 6: Negative numbers
+    //negative numbers
     passed += runTest("Negative numbers", {-5, -8, -2, -1, -7, -3, -4, -6});
     total++;
 
-    // Test 7: Mixed numbers
+    //mixed numbers
     passed += runTest("Mixed numbers", {-5, 8, 0, -2, 6, -1, 4, 3});
     total++;
 
-    // Test 8: Nearly sorted array
+    //nearly sorted array
     passed += runTest("Nearly sorted", {1, 2, 3, 5, 4, 6, 7, 8});
     total++;
 
-    // Test 9: Alternating values
+    //alternating values
     passed += runTest("Alternating values", {1, 9, 1, 9, 1, 9, 1, 9});
     total++;
 
-    // Test 10: Extreme integer values
-    passed += runTest("Extreme values", {INT_MAX, INT_MIN, 0, -1,
-                                         INT_MAX, INT_MIN, 1, 5});
+    //extreme integer values
+    passed += runTest("Extreme values", {INT_MAX, INT_MIN, 0, -1, INT_MAX, INT_MIN, 1, 5});
     total++;
 
     cout << "\n===== PERFORMANCE TESTS =====\n";
 
-    int sizes[] = {16, 32, 128, 256, 512, 1024, 4096, 16384,
-                   65536, 262144, 1048576, 4194304};
+    int sizes[] = {16, 32, 128, 256, 512, 1024, 4096, 16384, 65536, 262144, 1048576, 4194304};
 
     for (int n : sizes){
         passed += runTest("Random array", randomArray(n));
         total++;
     }
 
-    // Final test summary
     cout << "\n\n";
-    cout << "          TEST SUMMARY\n";
+    cout << "TEST SUMMARY\n";
 
     cout << "Total test cases: " << total << endl;
     cout << "Passed: " << passed << endl;

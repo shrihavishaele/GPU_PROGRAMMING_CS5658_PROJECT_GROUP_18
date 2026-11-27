@@ -1,0 +1,27 @@
+
+===== TESTS =====
+Small array (n=8): gpu = 0.04301 ms, cpu = 0.00200 ms -> PASS
+More duplicates (n=1048576): gpu = 0.90010 ms, cpu = 11.04400 ms -> PASS
+Negative + mixed (n=1048576): gpu = 0.96144 ms, cpu = 70.79000 ms -> PASS
+Large random (n=262144): gpu = 0.26614 ms, cpu = 16.04900 ms -> PASS
+Large random (n=1048576): gpu = 0.96275 ms, cpu = 71.33600 ms -> PASS
+Large random (n=4194304): gpu = 4.72794 ms, cpu = 306.29700 ms -> PASS
+Large random (n=16777216): gpu = 21.89722 ms, cpu = 1351.89300 ms -> PASS
+
+Passed: 7 / 7
+
+===== TESTS =====
+Small array (n=8): gpu = 0.04950 ms, cpu = 0.00300 ms -> PASS
+More duplicates (n=1048576): gpu = 0.91558 ms, cpu = 11.36300 ms -> PASS
+Negative + mixed (n=1048576): gpu = 0.98058 ms, cpu = 71.14100 ms -> PASS
+Large random (n=262144): gpu = 0.27296 ms, cpu = 16.13400 ms -> PASS
+Large random (n=1048576): gpu = 0.99037 ms, cpu = 71.72000 ms -> PASS
+Large random (n=4194304): gpu = 4.85526 ms, cpu = 308.13100 ms -> PASS
+Large random (n=16777216): gpu = 22.41904 ms, cpu = 1359.19900 ms -> PASS
+
+Passed: 7 / 7
+Generating '/tmp/nsys-report-7f07.qdstrm'
+[1/1] [0%                          ] mergesort_report_16938.nsys-rep[1/1] [0%                          ] mergesort_report_16938.nsys-rep[1/1] [5%                          ] mergesort_report_16938.nsys-rep[1/1] [11%                         ] mergesort_report_16938.nsys-rep[1/1] [=16%                        ] mergesort_report_16938.nsys-rep[1/1] [============57%             ] mergesort_report_16938.nsys-rep[1/1] [=============58%            ] mergesort_report_16938.nsys-rep[1/1] [==============63%           ] mergesort_report_16938.nsys-rep[1/1] [========================98% ] mergesort_report_16938.nsys-rep[1/1] [========================100%] mergesort_report_16938.nsys-rep[1/1] [========================100%] mergesort_report_16938.nsys-rep
+Generated:
+    /home/s112301034-unnikrishnan/mergesort/output/mergesort_report_16938.nsys-rep
+Job completed
