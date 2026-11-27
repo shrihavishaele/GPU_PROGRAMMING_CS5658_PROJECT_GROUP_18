@@ -1,0 +1,36 @@
+
+CORRECTNESS TESTS
+[PASS] Unsorted array (n = 8) | CPU: 0.1666 ms | GPU Kernel+Scan: 0.1452 ms | GPU Total: 0.7027 ms | Speedup(Kernel/Total): 1.15x / 0.24x | Shared: 256/256 (Fallback: 0)
+[PASS] Already sorted (n = 8) | CPU: 0.1490 ms | GPU Kernel+Scan: 0.0862 ms | GPU Total: 0.4262 ms | Speedup(Kernel/Total): 1.73x / 0.35x | Shared: 256/256 (Fallback: 0)
+[PASS] Reverse sorted (n = 8) | CPU: 0.1599 ms | GPU Kernel+Scan: 0.0888 ms | GPU Total: 0.4193 ms | Speedup(Kernel/Total): 1.80x / 0.38x | Shared: 256/256 (Fallback: 0)
+[PASS] All equal (n = 8) | CPU: 0.1367 ms | GPU Kernel+Scan: 0.0837 ms | GPU Total: 0.3941 ms | Speedup(Kernel/Total): 1.63x / 0.35x | Shared: 256/256 (Fallback: 0)
+[PASS] Duplicates (n = 8) | CPU: 0.1637 ms | GPU Kernel+Scan: 0.0882 ms | GPU Total: 0.4185 ms | Speedup(Kernel/Total): 1.86x / 0.39x | Shared: 256/256 (Fallback: 0)
+[PASS] Negative numbers (n = 8) | CPU: 0.1598 ms | GPU Kernel+Scan: 0.0834 ms | GPU Total: 0.4053 ms | Speedup(Kernel/Total): 1.92x / 0.39x | Shared: 256/256 (Fallback: 0)
+[PASS] Mixed numbers (n = 8) | CPU: 0.1555 ms | GPU Kernel+Scan: 0.0817 ms | GPU Total: 0.4115 ms | Speedup(Kernel/Total): 1.90x / 0.38x | Shared: 256/256 (Fallback: 0)
+[PASS] Nearly sorted (n = 8) | CPU: 0.1466 ms | GPU Kernel+Scan: 0.0907 ms | GPU Total: 0.4075 ms | Speedup(Kernel/Total): 1.62x / 0.36x | Shared: 256/256 (Fallback: 0)
+[PASS] Alternating values (n = 8) | CPU: 0.1491 ms | GPU Kernel+Scan: 0.0830 ms | GPU Total: 0.4033 ms | Speedup(Kernel/Total): 1.80x / 0.37x | Shared: 256/256 (Fallback: 0)
+[PASS] Extreme values (n = 8) | CPU: 0.1583 ms | GPU Kernel+Scan: 0.0820 ms | GPU Total: 0.3995 ms | Speedup(Kernel/Total): 1.93x / 0.40x | Shared: 256/256 (Fallback: 0)
+
+PERFORMANCE TESTS
+[PASS] Random array (n = 16) | CPU: 0.1755 ms | GPU Kernel+Scan: 0.0828 ms | GPU Total: 0.4400 ms | Speedup(Kernel/Total): 2.12x / 0.40x | Shared: 256/256 (Fallback: 0)
+[PASS] Random array (n = 32) | CPU: 0.1917 ms | GPU Kernel+Scan: 0.0822 ms | GPU Total: 0.4525 ms | Speedup(Kernel/Total): 2.33x / 0.42x | Shared: 256/256 (Fallback: 0)
+[PASS] Random array (n = 128) | CPU: 0.2312 ms | GPU Kernel+Scan: 0.0805 ms | GPU Total: 0.4736 ms | Speedup(Kernel/Total): 2.87x / 0.49x | Shared: 256/256 (Fallback: 0)
+[PASS] Random array (n = 256) | CPU: 0.2552 ms | GPU Kernel+Scan: 0.0831 ms | GPU Total: 0.4974 ms | Speedup(Kernel/Total): 3.07x / 0.51x | Shared: 256/256 (Fallback: 0)
+[PASS] Random array (n = 512) | CPU: 0.2944 ms | GPU Kernel+Scan: 0.0831 ms | GPU Total: 0.5006 ms | Speedup(Kernel/Total): 3.54x / 0.59x | Shared: 256/256 (Fallback: 0)
+[PASS] Random array (n = 1024) | CPU: 0.3276 ms | GPU Kernel+Scan: 0.0908 ms | GPU Total: 0.5209 ms | Speedup(Kernel/Total): 3.61x / 0.63x | Shared: 256/256 (Fallback: 0)
+[PASS] Random array (n = 4096) | CPU: 0.5272 ms | GPU Kernel+Scan: 0.1019 ms | GPU Total: 0.5610 ms | Speedup(Kernel/Total): 5.17x / 0.94x | Shared: 256/256 (Fallback: 0)
+[PASS] Random array (n = 16384) | CPU: 1.4580 ms | GPU Kernel+Scan: 0.1252 ms | GPU Total: 0.6392 ms | Speedup(Kernel/Total): 11.65x / 2.28x | Shared: 256/256 (Fallback: 0)
+[PASS] Random array (n = 65536) | CPU: 5.5020 ms | GPU Kernel+Scan: 0.2377 ms | GPU Total: 0.8141 ms | Speedup(Kernel/Total): 23.15x / 6.76x | Shared: 256/256 (Fallback: 0)
+[PASS] Random array (n = 262144) | CPU: 22.8879 ms | GPU Kernel+Scan: 1.5807 ms | GPU Total: 2.6456 ms | Speedup(Kernel/Total): 14.48x / 8.65x | Shared: 255/256 (Fallback: 1)
+[PASS] Random array (n = 1048576) | CPU: 94.8848 ms | GPU Kernel+Scan: 17.0815 ms | GPU Total: 19.1784 ms | Speedup(Kernel/Total): 5.55x / 4.95x | Shared: 1/256 (Fallback: 255)
+[PASS] Random array (n = 4194304) | CPU: 410.7310 ms | GPU Kernel+Scan: 34.0431 ms | GPU Total: 38.8918 ms | Speedup(Kernel/Total): 12.07x / 10.56x | Shared: 0/256 (Fallback: 256)
+TEST SUMMARY
+Total test cases: 22
+Passed: 22
+Failed: 0
+ALL TEST CASES PASSED
+Generating '/tmp/nsys-report-dbd6.qdstrm'
+[1/1] [0%                          ] sample_sort_report_16943.nsys-rep[1/1] [0%                          ] sample_sort_report_16943.nsys-rep[1/1] [12%                         ] sample_sort_report_16943.nsys-rep[1/1] [13%                         ] sample_sort_report_16943.nsys-rep[1/1] [=================74%        ] sample_sort_report_16943.nsys-rep[1/1] [==================76%       ] sample_sort_report_16943.nsys-rep[1/1] [====================83%     ] sample_sort_report_16943.nsys-rep[1/1] [========================100%] sample_sort_report_16943.nsys-rep[1/1] [========================100%] sample_sort_report_16943.nsys-rep
+Generated:
+    /home/s142301003-unnikrishnan/sample_sort/output/sample_sort_report_16943.nsys-rep
+Job completed
