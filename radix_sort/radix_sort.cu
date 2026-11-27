@@ -1,7 +1,3 @@
-/**
- * CS5658: GPU PROGRAMMING — Group 18
- * Parallel 4-bit LSD Radix Sort in NVIDIA CUDA
- */
 
 #include <cuda_runtime.h>
 #include <algorithm>
@@ -12,10 +8,8 @@
 #include <iostream>
 #include <random>
 #include <vector>
+using namespace std ;
 
-// ============================================================================
-// Constants
-// ============================================================================
 #define BLOCK_SIZE        256
 #define RADIX_BITS        4
 #define RADIX_BUCKETS     (1 << RADIX_BITS)   // 16
@@ -28,15 +22,12 @@
     do {                                                                   \
         cudaError_t err = (call);                                          \
         if (err != cudaSuccess) {                                          \
-            std::cerr << "CUDA error at " << __FILE__ << ":" << __LINE__  \
+            cerr << "CUDA error at " << __FILE__ << ":" << __LINE__  \
                       << " — " << cudaGetErrorString(err) << "\n";        \
-            std::exit(EXIT_FAILURE);                                       \
+            exit(EXIT_FAILURE);                                       \
         }                                                                  \
     } while (0)
 
-// ============================================================================
-// Kernel 1: Shared-Memory Pre-Sort + Local Histogram
-// ============================================================================
 __global__ void local_sort_and_histogram_kernel(
     const uint32_t* __restrict__ d_in,
     uint32_t* __restrict__ d_local_sorted,
@@ -59,8 +50,7 @@ __global__ void local_sort_and_histogram_kernel(
     uint32_t key = valid ? d_in[gid] : 0xFFFFFFFFu;
     const int lane = tid & 31;
     const int warp_id = tid >> 5;
-
-    // 4-bit digit sort via 4 sequential 1-bit stable splits
+    
     #pragma unroll
     for (int sub = 0; sub < RADIX_BITS; ++sub) {
         int pred = valid ? (((key >> (bit + sub)) & 1u) == 0u) : 0;
@@ -72,6 +62,7 @@ __global__ void local_sort_and_histogram_kernel(
         if (lane == 0) s_warp_zeros[warp_id] = warp_zeros;
         __syncthreads();
 
+        // Warp 0 scans the 8 warp zero-counts using shuffle intrinsics
         if (tid < (BLOCK_SIZE / 32)) {
             int val = s_warp_zeros[tid];
             int inclusive = val;
@@ -85,6 +76,7 @@ __global__ void local_sort_and_histogram_kernel(
         }
         __syncthreads();
 
+        // Stable split: 0-bits -> [0, total_zeros), 1-bits -> [total_zeros, BLOCK_SIZE)
         int zero_rank = s_warp_offset[warp_id] + prefix_zeros;
         int dest = pred ? zero_rank : (s_total_zeros + (tid - zero_rank));
         s_keys[dest] = key;
@@ -95,8 +87,10 @@ __global__ void local_sort_and_histogram_kernel(
         __syncthreads();
     }
 
+    // Write locally pre-sorted block back to global memory (coalesced write)
     if (valid) d_local_sorted[gid] = key;
 
+    // Equal digits form contiguous runs in s_keys; detect boundaries with zero atomics
     if (tid < RADIX_BUCKETS) { s_digit_start[tid] = 0; s_digit_end[tid] = 0; }
     __syncthreads();
 
@@ -109,15 +103,13 @@ __global__ void local_sort_and_histogram_kernel(
     }
     __syncthreads();
 
+    // Store column-major [digit * numBlocks + blockIdx.x] for a single global scan
     if (tid < RADIX_BUCKETS) {
         d_block_hist[tid * gridDim.x + blockIdx.x] =
             static_cast<uint32_t>(s_digit_end[tid] - s_digit_start[tid]);
     }
 }
 
-// ============================================================================
-// Kernel 2: Blelloch Exclusive Prefix Sum (bank-conflict-free)
-// ============================================================================
 __global__ void blelloch_scan_kernel(
     const uint32_t* __restrict__ d_in,
     uint32_t* __restrict__ d_out,
@@ -175,9 +167,6 @@ __global__ void add_block_sums_kernel(uint32_t* d_data,
     if (base + threadIdx.x + SCAN_BLOCK_SIZE < length)    d_data[base + threadIdx.x + SCAN_BLOCK_SIZE] += add;
 }
 
-// ============================================================================
-// Kernel 3: Coalesced Scatter
-// ============================================================================
 __global__ void scatter_kernel(
     const uint32_t* __restrict__ d_local_sorted,
     const uint32_t* __restrict__ d_block_hist,
@@ -204,6 +193,7 @@ __global__ void scatter_kernel(
     }
     __syncthreads();
 
+    // Adjacent threads with the same digit write to consecutive global addresses
     if (tid < valid_count) {
         uint32_t key    = d_local_sorted[block_start + tid];
         uint32_t digit  = (key >> bit) & 0xFu;
@@ -212,18 +202,16 @@ __global__ void scatter_kernel(
     }
 }
 
-// Sign-bit flip for signed integer support
+// Flipping the MSB (0x80000000) maps signed int32_t [INT_MIN, INT_MAX]
+// monotonically onto unsigned uint32_t [0, UINT_MAX] for bitwise radix sort.
 __global__ void flip_sign_bit_kernel(uint32_t* d_data, int n)
 {
     int gid = blockIdx.x * blockDim.x + threadIdx.x;
     if (gid < n) d_data[gid] ^= 0x80000000u;
 }
 
-// ============================================================================
-// Multi-level Scan
-// ============================================================================
 struct ScanWorkspace {
-    std::vector<uint32_t*> level_sums;
+    vector<uint32_t*> level_sums;
 
     void allocate(int length) {
         free_all();
@@ -256,9 +244,6 @@ void exclusive_scan_gpu(const uint32_t* d_in, uint32_t* d_out,
     CUDA_CHECK(cudaGetLastError());
 }
 
-// ============================================================================
-// GPU Workspace + Sort Driver
-// ============================================================================
 struct RadixSortWorkspace {
     uint32_t *d_ping = nullptr, *d_pong = nullptr;
     uint32_t *d_local_sorted = nullptr;
@@ -304,20 +289,17 @@ void gpu_radix_sort_device(uint32_t* d_data, int n,
         exclusive_scan_gpu(ws.d_block_hist, ws.d_global_offsets, hl, ws.scan_ws);
         scatter_kernel<<<nb, BLOCK_SIZE>>>(ws.d_local_sorted, ws.d_block_hist, ws.d_global_offsets, cur_out, n, bit);
         CUDA_CHECK(cudaGetLastError());
-        std::swap(cur_in, cur_out);
+        swap(cur_in, cur_out);
     }
 
     if (is_signed) { flip_sign_bit_kernel<<<nb, BLOCK_SIZE>>>(d_data, n); CUDA_CHECK(cudaGetLastError()); }
 }
 
-// ============================================================================
-// Test Helpers
-// ============================================================================
-std::vector<int> randomArray(int n)
+vector<int> randomArray(int n)
 {
-    std::mt19937 rng(42);
-    std::uniform_int_distribution<int> dist(INT_MIN, INT_MAX);
-    std::vector<int> arr(n);
+    mt19937 rng(42);
+    uniform_int_distribution<int> dist(INT_MIN, INT_MAX);
+    vector<int> arr(n);
     for (int& x : arr) x = dist(rng);
     return arr;
 }
@@ -326,22 +308,22 @@ void print_gpu_info()
 {
     cudaDeviceProp p{};
     CUDA_CHECK(cudaGetDeviceProperties(&p, 0));
-    std::cout << "============================================================\n"
+    cout << "============================================================\n"
               << "GPU Device        : " << p.name << "\n"
               << "Compute Capability: " << p.major << "." << p.minor << "\n"
               << "SM Count          : " << p.multiProcessorCount << "\n"
-              << "Global Memory     : " << std::fixed << std::setprecision(2)
+              << "Global Memory     : " << fixed << setprecision(2)
               << static_cast<double>(p.totalGlobalMem) / (1024.0 * 1024.0 * 1024.0) << " GB\n"
               << "============================================================\n";
 }
 
-int runTest(const std::string& name, const std::vector<int>& input,
+int runTest(const string& name, const vector<int>& input,
             RadixSortWorkspace& ws)
 {
     const int n = static_cast<int>(input.size());
     const int PRINT_LIMIT = 32;
 
-    std::vector<uint32_t> h_data(n);
+    vector<uint32_t> h_data(n);
     for (int i = 0; i < n; ++i) h_data[i] = static_cast<uint32_t>(input[i]);
 
     ws.ensure(n);
@@ -360,7 +342,7 @@ int runTest(const std::string& name, const std::vector<int>& input,
     CUDA_CHECK(cudaEventRecord(ev_k1));
     CUDA_CHECK(cudaEventSynchronize(ev_k1));
 
-    std::vector<uint32_t> h_out(n);
+    vector<uint32_t> h_out(n);
     CUDA_CHECK(cudaMemcpy(h_out.data(), ws.d_ping,
                           static_cast<size_t>(n) * sizeof(uint32_t), cudaMemcpyDeviceToHost));
     CUDA_CHECK(cudaEventRecord(ev_tot1));
@@ -372,35 +354,35 @@ int runTest(const std::string& name, const std::vector<int>& input,
     for (auto e : {ev_tot0, ev_tot1, ev_k0, ev_k1}) cudaEventDestroy(e);
 
     // CPU reference
-    std::vector<int> gpu_result(n);
+    vector<int> gpu_result(n);
     for (int i = 0; i < n; ++i) gpu_result[i] = static_cast<int>(h_out[i]);
 
-    std::vector<int> cpu_ref = input;
-    auto t0 = std::chrono::high_resolution_clock::now();
-    std::sort(cpu_ref.begin(), cpu_ref.end());
-    auto t1 = std::chrono::high_resolution_clock::now();
-    double cpu_ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
+    vector<int> cpu_ref = input;
+    auto t0 = chrono::high_resolution_clock::now();
+    sort(cpu_ref.begin(), cpu_ref.end());
+    auto t1 = chrono::high_resolution_clock::now();
+    double cpu_ms = chrono::duration<double, milli>(t1 - t0).count();
 
     bool ok = (gpu_result == cpu_ref);
 
-    std::cout << "\n====================================\n"
+    cout << "\n====================================\n"
               << "Test case: " << name << "\n"
               << "Array size: " << n << "\n"
               << "====================================\n";
     if (n <= PRINT_LIMIT) {
-        std::cout << "Original array: ";
-        for (int x : input)     std::cout << x << " ";
-        std::cout << "\nCPU sorted array: ";
-        for (int x : cpu_ref)   std::cout << x << " ";
-        std::cout << "\nGPU sorted array: ";
-        for (int x : gpu_result) std::cout << x << " ";
-        std::cout << "\n";
+        cout << "Original array: ";
+        for (int x : input)     cout << x << " ";
+        cout << "\nCPU sorted array: ";
+        for (int x : cpu_ref)   cout << x << " ";
+        cout << "\nGPU sorted array: ";
+        for (int x : gpu_result) cout << x << " ";
+        cout << "\n";
     }
-    std::cout << "CPU verification: PASS\n"
+    cout << "CPU verification: PASS\n"
               << "GPU verification: " << (ok ? "PASS" : "FAIL") << "\n"
               << "Sorting verification: " << (ok ? "PASS" : "FAIL") << "\n"
-              << std::fixed << std::setprecision(4)
-              << "CPU std::sort time: " << cpu_ms    << " ms\n"
+              << fixed << setprecision(4)
+              << "CPU sort time: " << cpu_ms    << " ms\n"
               << "GPU kernel time: "    << kernel_ms  << " ms\n"
               << "Total GPU time: "     << total_ms   << " ms\n"
               << "Kernel speedup: "     << cpu_ms / kernel_ms << "x\n"
@@ -409,9 +391,6 @@ int runTest(const std::string& name, const std::vector<int>& input,
     return ok ? 1 : 0;
 }
 
-// ============================================================================
-// Test Suite
-// ============================================================================
 int run_standard_test_suite()
 {
     int passed = 0, total = 0;
@@ -419,17 +398,17 @@ int run_standard_test_suite()
     RadixSortWorkspace ws;
     ws.ensure(4194304);   // pre-allocate for largest test
 
-    // Warm-up: eliminate cold driver/JIT overhead before timing
+    // eliminate cold driver/JIT overhead before timing
     { uint32_t h[2] = {1u, 0u};
       CUDA_CHECK(cudaMemcpy(ws.d_ping, h, 2 * sizeof(uint32_t), cudaMemcpyHostToDevice));
       gpu_radix_sort_device(ws.d_ping, 2, ws, true);
       CUDA_CHECK(cudaDeviceSynchronize()); }
 
-    auto R = [&](const std::string& n, const std::vector<int>& v) {
+    auto R = [&](const string& n, const vector<int>& v) {
         passed += runTest(n, v, ws); total++;
     };
 
-    std::cout << "\n===== CORRECTNESS TESTS =====\n";
+    cout << "\n===== CORRECTNESS TESTS =====\n";
     R("Unsorted array",     {8, 3, 7, 1, 9, 2, 6, 4});
     R("Already sorted",     {1, 2, 3, 4, 5, 6, 7, 8});
     R("Reverse sorted",     {8, 7, 6, 5, 4, 3, 2, 1});
@@ -441,13 +420,13 @@ int run_standard_test_suite()
     R("Alternating values", {1, 9, 1, 9, 1, 9, 1, 9});
     R("Extreme values",     {INT_MAX, INT_MIN, 0, -1, INT_MAX, INT_MIN, 1, 5});
 
-    std::cout << "\n===== PERFORMANCE TESTS =====\n";
+    cout << "\n===== PERFORMANCE TESTS =====\n";
     for (int n : {16, 32, 128, 256, 512, 1024, 4096, 16384,
                   65536, 262144, 1048576, 4194304}) {
         R("Random array", randomArray(n));
     }
 
-    std::cout << "\n====================================\n"
+    cout << "\n====================================\n"
               << "          TEST SUMMARY\n"
               << "====================================\n"
               << "Total test cases: " << total  << "\n"
@@ -458,9 +437,6 @@ int run_standard_test_suite()
     return (passed == total) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
-// ============================================================================
-// Main
-// ============================================================================
 int main()
 {
     print_gpu_info();
